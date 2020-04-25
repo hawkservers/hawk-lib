@@ -59,3 +59,4 @@ function Hawk.includeFolder(folder)
 end
 
 Hawk.includeFolder('hawk/')
+Hawk.Logger.debug('Started', 'Hawk Lib')
