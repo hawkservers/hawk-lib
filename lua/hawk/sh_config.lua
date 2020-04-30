@@ -1,6 +1,20 @@
 local hawkConfig = {
     ['logger'] = { 
         ['levels'] = {
+            ["trace"] = {
+                ["display"] = "Trace",
+                ["color"] = Color(150, 50, 217),
+                ["stores"] = false,
+                ["timestamps"] = true,
+                ["devOnly"] = true,
+            },
+            ["debug"] = {
+                ["display"] = "Debug",
+                ["color"] = Color(24,255,255),
+                ["stores"] = false,
+                ["timestamps"] = true,
+                ["devOnly"] = true,
+            },
             ["info"] = {
                 ["display"] = "Info",
                 ["color"] = Color(67, 160, 71),
@@ -19,13 +33,6 @@ local hawkConfig = {
                 ["stores"] = true,
                 ["timestamps"] = true,
             },
-            ["debug"] = {
-                ["display"] = "Debug",
-                ["color"] = Color(24,255,255),
-                ["stores"] = false,
-                ["timestamps"] = true,
-                ["devOnly"] = true,
-            },
             ["fatal"] = {
                 ["display"] = "Fatal",
                 ["color"] = Color(183, 28, 28),
@@ -42,7 +49,11 @@ local hawkConfig = {
   * @param {any} default
   * @return {any}
   */
-function Hawk.config(config, default) 
+function Hawk.config(config, default)
+    if (config == '*') then
+        return hawkConfig
+    end
+
     config = string.Split(config, '.')
     local response = hawkConfig
 
@@ -57,4 +68,13 @@ function Hawk.config(config, default)
 
         response = response[v]
     end
+end
+
+function Hawk.setConfig(config)
+    if (!istable(config)) then
+        Hawk.Logger.error('CONFIG', 'Config must be a table')
+        return
+    end
+
+    table.Merge(hawkConfig, config)
 end
